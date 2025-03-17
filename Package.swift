@@ -1,3 +1,4 @@
+// swift-tools-version: 5.7
 /*
 MIT License
 
@@ -22,9 +23,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-// swift-tools-version: 6.0
-// The swift-tools-version declares the minimum version of Swift required to build this package.
-
 import PackageDescription
 
 private let packageName = "TAAppCore"
@@ -37,10 +35,10 @@ let package = Package(
             targets: [packageName]),
     ],
     dependencies: [
-        .package(url: "git@github.com:TechArtists/ios-analytics.git", .upToNextMajor(from: "2.0.0")),
-        .package(url: "git@github.com:TechArtists/ios-debug-tools.git", .upToNextMajor(from: "1.4.0")),
-        .package(url: "git@github.com:TechArtists/ios-swift-log-os-log-handler.git", .upToNextMajor(from: "1.0.0")),
-        .package(url: "git@github.com:TechArtists/ios-swift-log-file-log-handler.git", .upToNextMajor(from: "1.0.0"))
+        .package(url: "git@github.com:TechArtists/ios-analytics.git", .upToNextMajor(from: "0.9.0")),
+        .package(url: "git@github.com:TechArtists/ios-debug-tools.git", .upToNextMajor(from: "0.9.0")),
+        .package(url: "git@github.com:TechArtists/ios-swift-log-os-log-handler.git", .upToNextMajor(from: "0.9.0")),
+        .package(url: "git@github.com:TechArtists/ios-swift-log-file-log-handler.git", .upToNextMajor(from: "0.9.0"))
     ],
     targets: [
         .target(
