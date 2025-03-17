@@ -1,0 +1,51 @@
+{
+  "originHash" : "ad08f892e17e01892716684301a29dd46fc3c8c91845d8e0861a03e474050d22",
+  "pins" : [
+    {
+      "identity" : "ios-analytics",
+      "kind" : "remoteSourceControl",
+      "location" : "git@github.com:TechArtists/ios-analytics.git",
+      "state" : {
+        "revision" : "dba7ad1208d31e55f138e56d05829219cf1d349e",
+        "version" : "2.2.2"
+      }
+    },
+    {
+      "identity" : "ios-debug-tools",
+      "kind" : "remoteSourceControl",
+      "location" : "git@github.com:TechArtists/ios-debug-tools.git",
+      "state" : {
+        "revision" : "0c0c3f880e2f159f0add5556a2e5683e75d26224",
+        "version" : "1.4.2"
+      }
+    },
+    {
+      "identity" : "ios-swift-log-file-log-handler",
+      "kind" : "remoteSourceControl",
+      "location" : "git@github.com:TechArtists/ios-swift-log-file-log-handler.git",
+      "state" : {
+        "revision" : "9e42272c3ff11f310136978cb8506c5f09cf1381",
+        "version" : "1.5.2"
+      }
+    },
+    {
+      "identity" : "ios-swift-log-os-log-handler",
+      "kind" : "remoteSourceControl",
+      "location" : "git@github.com:TechArtists/ios-swift-log-os-log-handler.git",
+      "state" : {
+        "revision" : "992220767cb0bfe6341be3f168f04ff4c4589144",
+        "version" : "1.0.3"
+      }
+    },
+    {
+      "identity" : "swift-log",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/apple/swift-log.git",
+      "state" : {
+        "revision" : "3d8596ed08bd13520157f0355e35caed215ffbfa",
+        "version" : "1.6.3"
+      }
+    }
+  ],
+  "version" : 3
+}
