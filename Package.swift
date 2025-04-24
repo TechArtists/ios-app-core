@@ -1,4 +1,4 @@
-// swift-tools-version: 5.7
+// swift-tools-version: 5.9
 /*
 MIT License
 
@@ -29,6 +29,10 @@ private let packageName = "TAAppCore"
 
 let package = Package(
     name: packageName,
+    platforms: [
+        .iOS(.v15),
+        .macOS(.v13)
+    ],
     products: [
         .library(
             name: packageName,
@@ -38,11 +42,20 @@ let package = Package(
         .package(url: "git@github.com:TechArtists/ios-analytics.git", .upToNextMajor(from: "0.9.0")),
         .package(url: "git@github.com:TechArtists/ios-debug-tools.git", .upToNextMajor(from: "0.9.0")),
         .package(url: "git@github.com:TechArtists/ios-swift-log-os-log-handler.git", .upToNextMajor(from: "0.9.0")),
-        .package(url: "git@github.com:TechArtists/ios-swift-log-file-log-handler.git", .upToNextMajor(from: "0.9.0"))
+        .package(url: "git@github.com:TechArtists/ios-swift-log-file-log-handler.git", .upToNextMajor(from: "0.9.0")),
+        .package(url: "git@github.com:firebase/firebase-ios-sdk.git", .upToNextMajor(from: "11.0.0"))
     ],
     targets: [
         .target(
-            name: packageName
+            name: packageName,
+            dependencies: [
+                .product(name: "TAAnalytics", package: "ios-analytics"),
+                .product(name: "TADebugTools", package: "ios-debug-tools"),
+                .product(name: "SwiftLogOSLogHandler", package: "ios-swift-log-os-log-handler"),
+                .product(name: "SwiftLogFileLogHandler", package: "ios-swift-log-file-log-handler"),
+                .product(name: "FirebaseFunctions", package: "firebase-ios-sdk"),
+                .product(name: "FirebaseAppCheck", package: "firebase-ios-sdk")
+            ]
         ),
     ]
 )
