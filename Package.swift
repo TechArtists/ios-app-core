@@ -30,7 +30,7 @@ private let packageName = "TAAppCore"
 let package = Package(
     name: packageName,
     platforms: [
-        .iOS(.v15),
+        .iOS(.v16),
         .macOS(.v13)
     ],
     products: [
@@ -43,7 +43,11 @@ let package = Package(
         .package(url: "git@github.com:TechArtists/ios-debug-tools.git", .upToNextMajor(from: "0.9.0")),
         .package(url: "git@github.com:TechArtists/ios-swift-log-os-log-handler.git", .upToNextMajor(from: "0.9.0")),
         .package(url: "git@github.com:TechArtists/ios-swift-log-file-log-handler.git", .upToNextMajor(from: "0.9.0")),
-        .package(url: "git@github.com:firebase/firebase-ios-sdk.git", .upToNextMajor(from: "11.0.0"))
+        .package(url: "git@github.com:firebase/firebase-ios-sdk.git", .upToNextMajor(from: "11.0.0")),
+        .package(
+              url: "https://github.com/apple/swift-collections.git",
+              .upToNextMajor(from: "1.2.0")
+        )
     ],
     targets: [
         .target(
@@ -54,7 +58,8 @@ let package = Package(
                 .product(name: "SwiftLogOSLogHandler", package: "ios-swift-log-os-log-handler"),
                 .product(name: "SwiftLogFileLogHandler", package: "ios-swift-log-file-log-handler"),
                 .product(name: "FirebaseFunctions", package: "firebase-ios-sdk"),
-                .product(name: "FirebaseAppCheck", package: "firebase-ios-sdk")
+                .product(name: "FirebaseAppCheck", package: "firebase-ios-sdk"),
+                .product(name: "Collections", package: "swift-collections")
             ]
         ),
     ]
