@@ -33,6 +33,8 @@ import SwiftUI
 import TAAnalytics
 
 public typealias OnboardingPathManager = NavigationPathManager<OnboardingFlow.StepsArrayWrapper>
+/// A typealias for onboarding steps that include paywall analytics.
+public typealias TAAnalyticsOnboardingPremiumView = TAOnboardingView & TAAnalyticsPaywalProvider
 
 public protocol TAOnboardingView: TAAnalyticsView {
     
