@@ -52,13 +52,13 @@ public struct OnboardingFlow: View {
                     analytics.trackOnboardingEnter(extraParams: nil)
                 }
         }
-        .environmentObject(navigationPathManager)
         .onChange(of: predefinedFlowSteps.elements) { newElements in
             navigationPathManager.updateViews(with: newElements)
         }
         .onDisappear {
             analytics.trackOnboardingExit(extraParams: nil)
         }
+        .environmentObject(navigationPathManager)
     }
     
     public init(isCompleted: Binding<Bool>? = nil, @OnboardingFlowBuilder _ content: () -> StepsArrayWrapper) {

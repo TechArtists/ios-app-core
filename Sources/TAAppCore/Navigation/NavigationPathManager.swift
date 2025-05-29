@@ -98,13 +98,13 @@ public class NavigationPathManager<Container: NavigationStepContainer>: Observab
         let existingKeys = Array(predefinedFlowSteps.elements.keys)
         let newIdentifiers = elements.map { NavigationStepIdentifier(element: $0) }
 
-        for key in existingKeys {
-            guard !newIdentifiers.contains(key) else { continue }
-            let originalIndex = existingKeys.firstIndex(of: key)!
-            if originalIndex > currentStepIndex {
+        for (index, key) in existingKeys.enumerated() {
+            if index > currentStepIndex {
                 predefinedFlowSteps.removeValue(forKey: key)
             } else {
-                pendingRemovals.insert(key)
+                if !newIdentifiers.contains(key) {
+                    pendingRemovals.insert(key)
+                }
             }
         }
 
