@@ -22,49 +22,48 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 //
-//  NavigationFlowBuilder.swift
+//  JourneyBuilder.swift
 //  TAAppCore
 //
 //  Created by Robert Tataru on 27.05.2025.
 //
 
 import SwiftUI
+import TAAnalytics
 
-public protocol NavigationStepIdentifiableView {
+/// A typealias for onboarding steps that include paywall analytics.
+public typealias TAAnalyticsOnboardingPremiumView = TAOnboardingView & TAAnalyticsPaywalProvider
+
+public protocol TAOnboardingView: TAAnalyticsView {
     
-    var view: any View { get }
-    var sourceMetadata: (fileID: StaticString, line: UInt, column: UInt) { get }
+    var navigationPathManager: NavigationPathManager { get }
 }
 
-public protocol NavigationStepContainer {
-    associatedtype Step: NavigationStepIdentifiableView
-    var elements: [Step] { get }
-}
-
-extension NavigationFlow {
+extension Journey {
     
-    public struct StepsArrayWrapper: NavigationStepContainer {
+    public struct StepsArrayWrapper {
         
-        public struct Element: NavigationStepIdentifiableView {
+        public struct Element {
             public var view: any View
             public var sourceMetadata: (fileID: StaticString, line: UInt, column: UInt)
+            
+            init(view: any TAOnboardingView, sourceMetadata: (fileID: StaticString, line: UInt, column: UInt)) {
+                self.view = view
+                self.sourceMetadata = sourceMetadata
+            }
         }
         
         public let elements: [Element]
-        
-        init(elements: [Element]) {
-            self.elements = elements
-        }
     }
     
     @resultBuilder
-    public enum NavigationFlowBuilder {
+    public enum JourneyBuilder {
         /// Navigation Flow Element
         public typealias Element = StepsArrayWrapper.Element
         
         /// If declared, provides contextual type information for statement expressions to translate them into partial results.
         public static func buildExpression(
-            _ view: some View,
+            _ view: some TAOnboardingView,
             _ fileId: StaticString = #fileID,
             _ line: UInt = #line,
             _ column: UInt = #column
@@ -79,7 +78,6 @@ extension NavigationFlow {
         
         /// Enables support for `if` statements that do not have an `else`.
         public static func buildOptional(_ elements: [Element]?) -> [Element] {
-            // swiftlint:disable:previous discouraged_optional_collection
             // The optional collection is a requirement defined by @resultBuilder, we can not use a non-optional collection here.
             elements ?? []
         }
@@ -111,7 +109,7 @@ extension NavigationFlow {
     }
 }
 
-extension NavigationFlow.StepsArrayWrapper.Element: Equatable {
+extension Journey.StepsArrayWrapper.Element: Equatable {
     public static func == (lhs: Self, rhs: Self) -> Bool {
         lhs.sourceMetadata.fileID.description == rhs.sourceMetadata.fileID.description &&
         lhs.sourceMetadata.line == rhs.sourceMetadata.line &&
@@ -119,7 +117,7 @@ extension NavigationFlow.StepsArrayWrapper.Element: Equatable {
     }
 }
 
-extension NavigationFlow.StepsArrayWrapper: Equatable {
+extension Journey.StepsArrayWrapper: Equatable {
     public static func == (lhs: Self, rhs: Self) -> Bool {
         lhs.elements == rhs.elements
     }

@@ -23,7 +23,7 @@ SOFTWARE.
 */
 
 //
-//  NavigationFlow.swift
+//  Journey.swift
 //  TAAppCore
 //
 //  Created by Robert Tataru on 27.05.2025.
@@ -31,9 +31,9 @@ SOFTWARE.
 
 import SwiftUI
 
-public struct NavigationFlow: View {
+public struct Journey: View {
     
-    @StateObject var navigationPathManager: NavigationPathManager<NavigationFlow.StepsArrayWrapper>
+    @StateObject var navigationPathManager: NavigationPathManager
     
     private let predefinedFlowSteps: StepsArrayWrapper
     private let isCompleted: Binding<Bool>?
@@ -52,7 +52,7 @@ public struct NavigationFlow: View {
         }
     }
     
-    public init(isCompleted: Binding<Bool>? = nil, @NavigationFlowBuilder _ content: () -> StepsArrayWrapper) {
+    public init(isCompleted: Binding<Bool>? = nil, @JourneyBuilder _ content: () -> StepsArrayWrapper) {
         self.isCompleted = isCompleted
         let predefinedFlowSteps = content()
         self.predefinedFlowSteps = predefinedFlowSteps

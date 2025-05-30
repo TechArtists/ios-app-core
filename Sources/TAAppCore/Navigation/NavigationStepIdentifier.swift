@@ -67,7 +67,7 @@ struct NavigationStepIdentifier {
 
     /// Main initializer for navigation step identification.
     @MainActor
-    init(element: any NavigationStepIdentifiableView) {
+    init(element: Journey.StepsArrayWrapper.Element) {
         self.viewType = type(of: element.view)
         self.sourceMetadata = element.sourceMetadata
 

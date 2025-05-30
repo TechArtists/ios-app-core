@@ -32,9 +32,7 @@ import SwiftUI
 import Collections
 
 @MainActor
-public class NavigationPathManager<Container: NavigationStepContainer>: ObservableObject {
-    
-    public typealias StepElement = Container.Step
+public class NavigationPathManager: ObservableObject {
     
     /// The navigation path of step identifiers, including both predefined and custom steps.
     /// Observing changes here cleans up removed custom steps and reapplies any pending removals.
@@ -59,20 +57,20 @@ public class NavigationPathManager<Container: NavigationStepContainer>: Observab
     // MARK: - Initialization
 
     /// Initializes the navigation manager with an optional completion binding and a set of predefined flow steps.
-    public init(isCompleted: Binding<Bool>? = nil, predefinedFlowSteps: Container) {
+    public init(isCompleted: Binding<Bool>? = nil, predefinedFlowSteps: Journey.StepsArrayWrapper) {
         configure(isCompleted: isCompleted, predefinedFlowSteps: predefinedFlowSteps)
     }
 
     // MARK: - Configuration
 
     /// Configures the manager with the given completion binding and container of predefined steps.
-    private func configure(isCompleted: Binding<Bool>?, predefinedFlowSteps: Container) {
+    private func configure(isCompleted: Binding<Bool>?, predefinedFlowSteps: Journey.StepsArrayWrapper) {
         self.isCompleted = isCompleted
         updateViews(with: predefinedFlowSteps.elements)
     }
 
     /// Updates the set of views based on a new list of step elements, managing conflicts and removals.
-    public func updateViews(with elements: [StepElement]) {
+    public func updateViews(with elements: [Journey.StepsArrayWrapper.Element]) {
         func failWithConflictingIdentifiers(
             existingIdentifier: NavigationStepIdentifier,
             newIdentifier: NavigationStepIdentifier,
