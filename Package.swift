@@ -44,7 +44,9 @@ let package = Package(
         .package(url: "git@github.com:TechArtists/ios-swift-log-os-log-handler.git", .upToNextMajor(from: "0.9.0")),
         .package(url: "git@github.com:TechArtists/ios-swift-log-file-log-handler.git", .upToNextMajor(from: "0.9.0")),
         .package(url: "git@github.com:firebase/firebase-ios-sdk.git", .upToNextMajor(from: "12.0.0")),
-        .package(url: "https://github.com/apple/swift-collections.git", .upToNextMajor(from: "1.2.0"))
+        .package(url: "https://github.com/apple/swift-collections.git", .upToNextMajor(from: "1.2.0")),
+        .package(url: "https://github.com/superwall/Superwall-iOS.git", .upToNextMajor(from: "4.0.0")),
+        .package(url: "https://github.com/adaptyteam/AdaptySDK-iOS.git", .upToNextMajor(from: "3.0.0"))
     ],
     targets: [
         .target(
@@ -56,7 +58,9 @@ let package = Package(
                 .product(name: "SwiftLogFileLogHandler", package: "ios-swift-log-file-log-handler"),
                 .product(name: "FirebaseFunctions", package: "firebase-ios-sdk"),
                 .product(name: "FirebaseAppCheck", package: "firebase-ios-sdk"),
-                .product(name: "Collections", package: "swift-collections")
+                .product(name: "Collections", package: "swift-collections"),
+                .product(name: "SuperwallKit", package: "Superwall-iOS"),
+                .product(name: "Adapty", package: "AdaptySDK-iOS")
             ]
         ),
     ]
