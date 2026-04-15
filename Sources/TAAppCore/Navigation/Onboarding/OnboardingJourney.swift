@@ -20,6 +20,9 @@ public struct OnboardingJourney: View {
             .onAppear {
                 analytics.trackOnboardingEnter(extraParams: nil)
             }
+            .onDisappear {
+                analytics.trackOnboardingExit(extraParams: nil)
+            }
             .onChange(of: isCompleted?.wrappedValue) { newValue in
                 if newValue == true {
                     analytics.trackOnboardingExit(extraParams: nil)
