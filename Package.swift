@@ -43,7 +43,7 @@ let package = Package(
         .package(url: "git@github.com:TechArtists/ios-debug-tools.git", .upToNextMajor(from: "1.0.0")),
         .package(url: "git@github.com:TechArtists/ios-swift-log-os-log-handler.git", .upToNextMajor(from: "1.0.0")),
         .package(url: "git@github.com:TechArtists/ios-swift-log-file-log-handler.git", .upToNextMajor(from: "1.0.0")),
-        .package(url: "git@github.com:TechArtists/ios-flags.git", .upToNextMajor(from: "1.0.0")),
+        .package(url: "git@github.com:TechArtists/ios-flags.git", .upToNextMajor(from: "1.1.0")),
         .package(url: "git@github.com:firebase/firebase-ios-sdk.git", .upToNextMajor(from: "12.0.0")),
         .package(url: "https://github.com/apple/swift-collections.git", .upToNextMajor(from: "1.2.0")),
         .package(url: "https://github.com/superwall/Superwall-iOS.git", .upToNextMajor(from: "4.0.0")),
@@ -54,6 +54,7 @@ let package = Package(
             name: packageName,
             dependencies: [
                 .product(name: "TAFlags", package: "ios-flags"),
+                .product(name: "TAFlagsMacros", package: "ios-flags"),
                 .product(name: "TAAnalytics", package: "ios-analytics"),
                 .product(name: "TADebugTools", package: "ios-debug-tools"),
                 .product(name: "SwiftLogOSLogHandler", package: "ios-swift-log-os-log-handler"),
