@@ -54,7 +54,6 @@ let package = Package(
             name: packageName,
             dependencies: [
                 .product(name: "TAFlags", package: "ios-flags"),
-                .product(name: "TAFlagsMacros", package: "ios-flags"),
                 .product(name: "TAAnalytics", package: "ios-analytics"),
                 .product(name: "TADebugTools", package: "ios-debug-tools"),
                 .product(name: "SwiftLogOSLogHandler", package: "ios-swift-log-os-log-handler"),
