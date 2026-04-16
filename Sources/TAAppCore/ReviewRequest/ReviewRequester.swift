@@ -14,9 +14,29 @@ import TAAnalytics
 @MainActor
 public final class ReviewRequester: ObservableObject {
 
+    public struct State: Equatable, Sendable {
+        public let lastPromptDate: Date?
+        public let launchesSincePrompt: Int
+        public let eventsSincePrompt: Int
+        public let isEligibleForRequest: Bool
+
+        public init(
+            lastPromptDate: Date?,
+            launchesSincePrompt: Int,
+            eventsSincePrompt: Int,
+            isEligibleForRequest: Bool
+        ) {
+            self.lastPromptDate = lastPromptDate
+            self.launchesSincePrompt = launchesSincePrompt
+            self.eventsSincePrompt = eventsSincePrompt
+            self.isEligibleForRequest = isEligibleForRequest
+        }
+    }
+
     private let store: ReviewRequestStore
     private let strategy: ReviewRequestStrategy
     public var analytics: TAAnalytics?
+    @Published public private(set) var state: State
 
     /// Inject a custom store for tests or AppGroup setups.
     public init(
@@ -27,6 +47,7 @@ public final class ReviewRequester: ObservableObject {
         self.store = store
         self.strategy = strategy
         self.analytics = analytics
+        self.state = Self.makeState(store: store, strategy: strategy)
     }
 
     // MARK: Public API
@@ -34,17 +55,21 @@ public final class ReviewRequester: ObservableObject {
     /// – Call early in `scene(_:willConnectTo:options:)` or `applicationDidFinishLaunching`.
     public func applicationDidLaunch() {
         store.recordLaunch()
+        refreshState()
     }
 
     /// Manually record a positive in‑app event (level clear, workout finished, etc.).
     public func recordPositiveEvent() {
         store.recordEvent()
+        refreshState()
     }
 
     /// Attempts to display a prompt if the given strategy evaluates to `true`.
-    public func requestIfAppropriate() {
-        guard strategy.shouldRequestReview(using: store) else { return }
-        
+    @discardableResult
+    public func requestIfAppropriate() -> Bool {
+        refreshState()
+        guard state.isEligibleForRequest else { return false }
+
         analytics?.track(event: .init(EventAnalyticsModel.REVIEW_REQUEST_TRIGGERED.rawValue), params: [
             "strategy_type": String(describing: strategy)
         ])
@@ -53,6 +78,12 @@ public final class ReviewRequester: ObservableObject {
             "strategy_type": String(describing: strategy)
         ])
         store.recordPromptShown()
+        refreshState()
+        return true
+    }
+
+    public func reload() {
+        refreshState()
     }
 
     // MARK: System interaction
@@ -60,6 +91,21 @@ public final class ReviewRequester: ObservableObject {
         guard let scene = UIApplication.shared.connectedScenes
                 .first(where: { ($0 as? UIWindowScene)?.activationState == .foregroundActive }) as? UIWindowScene else { return }
         SKStoreReviewController.requestReview(in: scene)
+    }
+
+    private func refreshState() {
+        let updatedState = Self.makeState(store: store, strategy: strategy)
+        guard state != updatedState else { return }
+        state = updatedState
+    }
+
+    private static func makeState(store: ReviewRequestStore, strategy: ReviewRequestStrategy) -> State {
+        State(
+            lastPromptDate: store.lastPromptDate,
+            launchesSincePrompt: store.launchesSincePrompt,
+            eventsSincePrompt: store.eventsSincePrompt,
+            isEligibleForRequest: strategy.shouldRequestReview(using: store)
+        )
     }
 }
 
