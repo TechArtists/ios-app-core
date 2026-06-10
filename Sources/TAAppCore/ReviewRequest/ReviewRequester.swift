@@ -88,7 +88,9 @@ public final class ReviewRequester: ObservableObject {
     /// Records a positive event and immediately evaluates the current eligibility.
     @discardableResult
     public func recordPositiveEventAndRequestIfAppropriate() -> Bool {
-        recordPositiveEvent()
+        // `requestIfAppropriate()` refreshes state itself, so record the event on the
+        // store directly to avoid recomputing state twice in a row.
+        store.recordEvent()
         return requestIfAppropriate()
     }
 
@@ -101,7 +103,12 @@ public final class ReviewRequester: ObservableObject {
         analytics?.track(event: .init(EventAnalyticsModel.REVIEW_REQUEST_TRIGGERED.rawValue), params: [
             "strategy_type": strategyDescription
         ])
-        performSystemRequest()
+
+        // Only consume eligibility (analytics, counter reset, cooldown) if we could
+        // actually hand the request to the system. Without a foreground-active scene
+        // the system prompt can't be presented, so the eligible window must be preserved.
+        guard performSystemRequest() else { return false }
+
         analytics?.track(event: .init(EventAnalyticsModel.REVIEW_PROMPT_SHOWN.rawValue), params: [
             "strategy_type": strategyDescription
         ])
@@ -115,10 +122,14 @@ public final class ReviewRequester: ObservableObject {
     }
 
     // MARK: System interaction
-    private func performSystemRequest() {
+    /// - Returns: `true` if the request was handed to the system, `false` if there was
+    ///   no foreground-active scene to present it in. A `true` result only means the
+    ///   request was made — the system may still choose not to display it (annual quota).
+    private func performSystemRequest() -> Bool {
         guard let scene = UIApplication.shared.connectedScenes
-                .first(where: { ($0 as? UIWindowScene)?.activationState == .foregroundActive }) as? UIWindowScene else { return }
-        SKStoreReviewController.requestReview(in: scene)
+                .first(where: { ($0 as? UIWindowScene)?.activationState == .foregroundActive }) as? UIWindowScene else { return false }
+        AppStore.requestReview(in: scene)
+        return true
     }
 
     private func refreshState() {

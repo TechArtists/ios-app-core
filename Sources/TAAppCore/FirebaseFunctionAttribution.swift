@@ -10,6 +10,7 @@ import FirebaseFunctions
 
 public struct FirebaseFunctionAttribution {
     
+    /// Access only after `FirebaseApp.configure()` has completed.
     public static let functions: Functions = {
         let instance = Functions.functions()
         instance.useEmulator(withHost: "localhost", port: 5001)

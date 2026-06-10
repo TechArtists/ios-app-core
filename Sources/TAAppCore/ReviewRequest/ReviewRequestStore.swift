@@ -7,7 +7,9 @@
 
 import Foundation
 
-public final class ReviewRequestStore {
+/// Thread-safe: all stored state is backed by `UserDefaults`, which is itself thread-safe.
+/// `@unchecked` because `UserDefaults` is not annotated `Sendable` by the SDK.
+public final class ReviewRequestStore: @unchecked Sendable {
     public static let standard = ReviewRequestStore()
 
     private let defaults: UserDefaults
