@@ -99,7 +99,26 @@ public final class ReviewRequester: ObservableObject {
     public func requestIfAppropriate() -> Bool {
         refreshState()
         guard state.isEligibleForRequest else { return false }
+        return presentPrompt()
+    }
 
+    /// Displays the prompt regardless of strategy eligibility. Use for contextual moments
+    /// (onboarding finish, manual "Rate us" tap) where the caller already decided to ask.
+    /// The system still enforces its own annual quota.
+    @discardableResult
+    public func requestNow() -> Bool {
+        presentPrompt()
+    }
+
+    public func reload() {
+        refreshState()
+    }
+
+    // MARK: System interaction
+    /// Shared presenter: tracks analytics, hands the request to the system, and only
+    /// consumes the prompt counter if the system actually received it.
+    @discardableResult
+    private func presentPrompt() -> Bool {
         analytics?.track(event: .init(EventAnalyticsModel.REVIEW_REQUEST_TRIGGERED.rawValue), params: [
             "strategy_type": strategyDescription
         ])
@@ -117,11 +136,6 @@ public final class ReviewRequester: ObservableObject {
         return true
     }
 
-    public func reload() {
-        refreshState()
-    }
-
-    // MARK: System interaction
     /// - Returns: `true` if the request was handed to the system, `false` if there was
     ///   no foreground-active scene to present it in. A `true` result only means the
     ///   request was made — the system may still choose not to display it (annual quota).
