@@ -11,6 +11,7 @@ import TAAnalytics
 public struct OnboardingJourney: View {
     
     @EnvironmentObject private var analytics: TAAnalytics
+    @State private var didTrackOnboardingExit = false
     
     private let isCompleted: Binding<Bool>?
     private let stepsBuilder: () -> Journey.StepsArrayWrapper
@@ -18,14 +19,15 @@ public struct OnboardingJourney: View {
     public var body: some View {
         Journey(isCompleted: isCompleted, stepsBuilder)
             .onAppear {
+                didTrackOnboardingExit = false
                 analytics.trackOnboardingEnter(extraParams: nil)
             }
             .onDisappear {
-                analytics.trackOnboardingExit(extraParams: nil)
+                trackOnboardingExitOnce()
             }
             .onChange(of: isCompleted?.wrappedValue) { newValue in
                 if newValue == true {
-                    analytics.trackOnboardingExit(extraParams: nil)
+                    trackOnboardingExitOnce()
                 }
             }
     }
@@ -38,5 +40,11 @@ public struct OnboardingJourney: View {
     public init( isCompleted: Binding<Bool>? = nil, stepsWrapped: @escaping () -> Journey.StepsArrayWrapper) {
         self.isCompleted = isCompleted
         self.stepsBuilder = { stepsWrapped() }
+    }
+
+    private func trackOnboardingExitOnce() {
+        guard !didTrackOnboardingExit else { return }
+        didTrackOnboardingExit = true
+        analytics.trackOnboardingExit(extraParams: nil)
     }
 }
