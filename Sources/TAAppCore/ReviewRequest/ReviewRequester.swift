@@ -119,16 +119,12 @@ public final class ReviewRequester: ObservableObject {
     /// consumes the prompt counter if the system actually received it.
     @discardableResult
     private func presentPrompt() -> Bool {
-        analytics?.track(event: .init(EventAnalyticsModel.REVIEW_REQUEST_TRIGGERED.rawValue), params: [
-            "strategy_type": strategyDescription
-        ])
-
         // Only consume eligibility (analytics, counter reset, cooldown) if we could
         // actually hand the request to the system. Without a foreground-active scene
         // the system prompt can't be presented, so the eligible window must be preserved.
         guard performSystemRequest() else { return false }
 
-        analytics?.track(event: .init(EventAnalyticsModel.REVIEW_PROMPT_SHOWN.rawValue), params: [
+        analytics?.track(event: .init(EventAnalyticsModel.REVIEW_REQUEST_SUBMITTED.rawValue), params: [
             "strategy_type": strategyDescription
         ])
         store.recordPromptShown()
@@ -169,7 +165,6 @@ public final class ReviewRequester: ObservableObject {
 extension ReviewRequester {
     
     enum EventAnalyticsModel: String {
-        case REVIEW_PROMPT_SHOWN
-        case REVIEW_REQUEST_TRIGGERED
+        case REVIEW_REQUEST_SUBMITTED
     }
 }
