@@ -124,7 +124,7 @@ public final class ReviewRequester: ObservableObject {
         // the system prompt can't be presented, so the eligible window must be preserved.
         guard performSystemRequest() else { return false }
 
-        analytics?.track(event: .init(EventAnalyticsModel.REVIEW_REQUEST_SUBMITTED.rawValue), params: [
+        analytics?.track(event: .init(EventAnalyticsModel.reviewRequestSubmitted.rawValue), params: [
             "strategy_type": strategyDescription
         ])
         store.recordPromptShown()
@@ -165,6 +165,6 @@ public final class ReviewRequester: ObservableObject {
 extension ReviewRequester {
     
     enum EventAnalyticsModel: String {
-        case REVIEW_REQUEST_SUBMITTED
+        case reviewRequestSubmitted = "review_request_submitted"
     }
 }
